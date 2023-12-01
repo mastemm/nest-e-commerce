@@ -7,16 +7,30 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  public async create(createUserDto: CreateUserDto) {
+    const createdUser = await this.prisma.users.create({
+      data: {
+        Pseudo: createUserDto.pseudo,
+        Mail: createUserDto.mail,
+      },
+    });
+    return createdUser;
   }
 
   findAll() {
     return `This action returns all users`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  /* findOne(id: number) {
+     return `This action returns a #${id} user`;
+  }*/
+  public async getByUUID(uuid: string) {
+    const getUser = await this.prisma.users.findUnique({
+      where: {
+        UUID: uuid,
+      },
+    });
+    return getUser;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

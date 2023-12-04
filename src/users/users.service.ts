@@ -33,8 +33,17 @@ export class UsersService {
     return getUser;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  public async updateByUUID(uuid: string, updateUserDto: UpdateUserDto) {
+    const updateUser = await this.prisma.users.findUnique({
+      where: {
+        UUID: uuid,
+      },
+      data: {
+        Pseudo: !!updateUserDto.pseudo ? updateUserDto.pseudo : undefined,
+        Mail: !!updateUserDto.mail ? updateUserDto.mail : undefined,
+      },
+    });
+    return updateUser;
   }
 
   remove(id: number) {
